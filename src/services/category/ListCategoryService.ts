@@ -6,6 +6,7 @@ class ListCategoryService {
       select: {
         id: true,
         name: true,
+        status: true,
       },
     });
     return category;
