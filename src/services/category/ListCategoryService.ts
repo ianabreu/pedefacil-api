@@ -8,6 +8,9 @@ class ListCategoryService {
         name: true,
         status: true,
       },
+      orderBy: {
+        name: "asc",
+      },
     });
     return category;
   }

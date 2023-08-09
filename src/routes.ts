@@ -12,6 +12,7 @@ import { CreateCategoryController } from "./controllers/category/CreateCategoryC
 import { ListCategoryController } from "./controllers/category/ListCategoryController";
 
 import { CreateProductController } from "./controllers/product/CreateProductController";
+import { UpdateCategoryController } from "./controllers/category/UpdateCategory";
 import { ListByCategoryController } from "./controllers/product/ListByCategoryController";
 
 import { CreateOrderController } from "./controllers/order/CreateOrderController";
@@ -38,6 +39,11 @@ router.post(
   "/category",
   isAuthenticated,
   new CreateCategoryController().handle
+);
+router.patch(
+  "/category",
+  isAuthenticated,
+  new UpdateCategoryController().handle
 );
 router.get("/category", isAuthenticated, new ListCategoryController().handle);
 
