@@ -12,9 +12,7 @@ class DeleteCategoryService {
       },
     });
     if (hasProduct) {
-      throw new ConflictError(
-        "Não é possível excluir a categoria, há produtos vinculados."
-      );
+      throw new ConflictError("Cannot delete category with linked products.");
     }
 
     const category = await prismaClient.category.delete({

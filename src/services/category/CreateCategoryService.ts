@@ -7,8 +7,10 @@ interface CategoryRequest {
 }
 class CreateCategoryService {
   async execute({ name, status }: CategoryRequest) {
-    if (name === "") {
-      throw new BadRequestError("invalid name");
+    if (name.length < 2) {
+      throw new BadRequestError(
+        "Invalid name. Minimum length is 2 characters."
+      );
     }
 
     const category = await prismaClient.category.create({
