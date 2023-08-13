@@ -1,3 +1,4 @@
+import { BadRequestError } from "../../helpers/api-errors";
 import prismaClient from "../../prisma";
 
 interface CategoryRequest {
@@ -8,7 +9,7 @@ interface CategoryRequest {
 class UpdateCategoryService {
   async execute({ id, name, status }: CategoryRequest) {
     if (name === "") {
-      throw new Error("invalid name");
+      throw new BadRequestError("invalid name");
     }
 
     const category = await prismaClient.category.update({

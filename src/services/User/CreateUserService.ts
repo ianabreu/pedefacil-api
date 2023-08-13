@@ -1,3 +1,4 @@
+import { BadRequestError, ConflictError } from "../../helpers/api-errors";
 import prismaClient from "../../prisma";
 import { hash } from "bcryptjs";
 
@@ -10,7 +11,7 @@ interface UserRequest {
 class CreateUserService {
   async execute({ name, email, password }: UserRequest) {
     //Verificar se enviou o email
-    if (!email) throw new Error("email incorrect");
+    if (!email) throw new BadRequestError("email incorrect");
 
     //Verificar se o email já está cadastrado
     const userAlreadyExists = await prismaClient.user.findFirst({
@@ -18,7 +19,7 @@ class CreateUserService {
         email: email,
       },
     });
-    if (userAlreadyExists) throw new Error("user already exists");
+    if (userAlreadyExists) throw new ConflictError("user already exists");
     // Cadastrar user
     const passwordHash = await hash(password, 8);
 

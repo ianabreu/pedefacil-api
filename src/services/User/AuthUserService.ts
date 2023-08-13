@@ -1,6 +1,7 @@
 import prismaClient from "../../prisma";
 import { compare } from "bcryptjs";
 import { sign } from "jsonwebtoken";
+import { UnauthorizedError } from "../../helpers/api-errors";
 
 interface AuthRequest {
   email: string;
@@ -14,10 +15,10 @@ class AuthUserService {
         email: email,
       },
     });
-    if (!user) throw new Error("user/password incorrect");
+    if (!user) throw new UnauthorizedError("user/password incorrect");
     // Verificar se a senha está correta
     const passwordMatch = await compare(password, user.password);
-    if (!passwordMatch) throw new Error("user/password incorrect");
+    if (!passwordMatch) throw new UnauthorizedError("user/password incorrect");
 
     //Se deu tudo certo vamor gerar o token pro usuário.
     const token = sign(

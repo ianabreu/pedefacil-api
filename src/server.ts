@@ -1,8 +1,10 @@
-import express, { Request, Response, NextFunction } from "express";
+import express from "express";
+import "express-async-errors";
 import cors from "cors";
 import path from "path";
 
 import { router } from "./routes";
+import { errorMiddlewere } from "./middlewares/error";
 
 const PORT = 3333;
 
@@ -15,19 +17,7 @@ app.use(router);
 
 app.use("/files", express.static(path.resolve(__dirname, "..", "tmp")));
 
-app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
-  if (err instanceof Error) {
-    //se for umas instacia do tipo Error
-    return res.status(400).json({
-      error: err.message,
-    });
-  }
-
-  return res.status(500).json({
-    status: "error",
-    message: "Internal server error.",
-  });
-});
+app.use(errorMiddlewere);
 
 app.listen(PORT, () => {
   console.log(`servidor rodando na porta ${PORT}`);

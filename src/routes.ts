@@ -1,4 +1,4 @@
-import { Router, Request, Response } from "express";
+import { Router } from "express";
 import multer from "multer";
 
 import uploadConfig from "./config/multer";
@@ -8,11 +8,12 @@ import { CreateUserController } from "./controllers/user/CreateUserController";
 import { AuthUserController } from "./controllers/user/AuthUserController";
 import { DetailUserController } from "./controllers/user/DetailUserController";
 
-import { CreateCategoryController } from "./controllers/category/CreateCategoryController";
 import { ListCategoryController } from "./controllers/category/ListCategoryController";
+import { CreateCategoryController } from "./controllers/category/CreateCategoryController";
+import { UpdateCategoryController } from "./controllers/category/UpdateCategoryController";
+import { DeleteCategoryController } from "./controllers/category/DeleteCategoryController";
 
 import { CreateProductController } from "./controllers/product/CreateProductController";
-import { UpdateCategoryController } from "./controllers/category/UpdateCategory";
 import { ListByCategoryController } from "./controllers/product/ListByCategoryController";
 
 import { CreateOrderController } from "./controllers/order/CreateOrderController";
@@ -35,6 +36,7 @@ router.post("/session", new AuthUserController().handle);
 router.get("/me", isAuthenticated, new DetailUserController().handle);
 
 //-- ROTAS CATEGORY --
+router.get("/category", isAuthenticated, new ListCategoryController().handle);
 router.post(
   "/category",
   isAuthenticated,
@@ -45,7 +47,11 @@ router.patch(
   isAuthenticated,
   new UpdateCategoryController().handle
 );
-router.get("/category", isAuthenticated, new ListCategoryController().handle);
+router.delete(
+  "/category",
+  isAuthenticated,
+  new DeleteCategoryController().handle
+);
 
 //-- ROTAS PRODUCT --
 router.post(
@@ -61,7 +67,7 @@ router.get(
   new ListByCategoryController().handle
 );
 
-//-- ROTAS PRODUCT --
+//-- ROTAS ORDER --
 router.post("/order", isAuthenticated, new CreateOrderController().handle);
 router.delete("/order", isAuthenticated, new RemoveOrderController().handle);
 
