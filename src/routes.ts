@@ -1,95 +1,19 @@
 import { Router } from "express";
-import multer from "multer";
 
-import uploadConfig from "./config/multer";
-import { isAuthenticated } from "./middlewares/isAuthenticated";
-
-import { CreateUserController } from "./controllers/user/CreateUserController";
-import { AuthUserController } from "./controllers/user/AuthUserController";
-import { DetailUserController } from "./controllers/user/DetailUserController";
-
-import { ListCategoryController } from "./controllers/category/ListCategoryController";
-import { CreateCategoryController } from "./controllers/category/CreateCategoryController";
-import { UpdateCategoryController } from "./controllers/category/UpdateCategoryController";
-import { DeleteCategoryController } from "./controllers/category/DeleteCategoryController";
-
-import { CreateProductController } from "./controllers/product/CreateProductController";
-import { ListByCategoryController } from "./controllers/product/ListByCategoryController";
-
-import { CreateOrderController } from "./controllers/order/CreateOrderController";
-import { RemoveOrderController } from "./controllers/order/RemoveOrderController";
-
-import { AddItemController } from "./controllers/order/AddItemController";
-import { RemoveItemController } from "./controllers/order/RemoveItemController";
-
-import { SendOrderController } from "./controllers/order/SendOrderController";
-import { ListOrdersController } from "./controllers/order/ListOrdersController";
-import { DetailOrderController } from "./controllers/order/DetailOrderController";
-import { FinishOrderController } from "./controllers/order/FinishOrderController";
+import { userRouter } from "./routes/userRouter";
+import { categoryRouter } from "./routes/categoryRouter";
+import { productRouter } from "./routes/productRouter";
+import { orderRouter } from "./routes/orderRouter";
 
 const router = Router();
-const upload = multer(uploadConfig.upload("./tmp"));
 
 //-- ROTAS USER --
-router.post("/users", new CreateUserController().handle);
-router.post("/session", new AuthUserController().handle);
-router.get("/me", isAuthenticated, new DetailUserController().handle);
-
+router.use(userRouter);
 //-- ROTAS CATEGORY --
-router.get("/category", isAuthenticated, new ListCategoryController().handle);
-router.post(
-  "/category",
-  isAuthenticated,
-  new CreateCategoryController().handle
-);
-router.patch(
-  "/category",
-  isAuthenticated,
-  new UpdateCategoryController().handle
-);
-router.delete(
-  "/category",
-  isAuthenticated,
-  new DeleteCategoryController().handle
-);
-
+router.use(categoryRouter);
 //-- ROTAS PRODUCT --
-router.post(
-  "/product",
-  isAuthenticated,
-  upload.single("file"),
-  new CreateProductController().handle
-);
-
-router.get(
-  "/category/product",
-  isAuthenticated,
-  new ListByCategoryController().handle
-);
-
+router.use(productRouter);
 //-- ROTAS ORDER --
-router.post("/order", isAuthenticated, new CreateOrderController().handle);
-router.delete("/order", isAuthenticated, new RemoveOrderController().handle);
-
-router.post("/order/add", isAuthenticated, new AddItemController().handle);
-router.delete(
-  "/order/remove",
-  isAuthenticated,
-  new RemoveItemController().handle
-);
-router.put("/order/send", isAuthenticated, new SendOrderController().handle);
-
-router.get("/orders", isAuthenticated, new ListOrdersController().handle);
-
-router.get(
-  "/order/detail",
-  isAuthenticated,
-  new DetailOrderController().handle
-);
-router.put(
-  "/order/finish",
-  isAuthenticated,
-  new FinishOrderController().handle
-);
+router.use(orderRouter);
 
 export { router };
