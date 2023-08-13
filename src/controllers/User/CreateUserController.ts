@@ -13,7 +13,7 @@ class CreateUserController {
       password,
     });
 
-    return res.json(user);
+    return res.json({ ok: true }); //user);
   }
 }
 
